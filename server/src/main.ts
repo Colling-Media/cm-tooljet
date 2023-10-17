@@ -73,6 +73,12 @@ async function bootstrap() {
   });
   app.use(compression());
 
+  let trustedDomains = []
+
+  if(process.env.TRUSTED_DOMAINS) {
+    trustedDomains = process.env.TRUSTED_DOMAINS.split(',')
+  }
+
   app.use(
     helmet.contentSecurityPolicy({
       useDefaults: true,
@@ -93,6 +99,7 @@ async function bootstrap() {
           'https://unpkg.com/react-dom@16.7.0/umd/react-dom.production.min.js',
           'cdn.skypack.dev',
           'cdn.jsdelivr.net',
+          ...trustedDomains,
         ],
         'default-src': [
           'maps.googleapis.com',
